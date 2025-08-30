@@ -4,14 +4,71 @@
   <meta charset="utf-8">
   <title>Stream Deck de Áudio</title>
   <style>
-    body{margin:0;display:flex;justify-content:center;background:#000}
-    #stream-deck{background:rgb(0,51,153);margin:40px auto;padding:16px;border-radius:12px;text-align:center}
-    #display{color:rgb(254,177,0);font-weight:700;margin-bottom:12px;min-height:1.5em}
-    #loop-toggle{display:inline-block;margin-bottom:12px;background:#001a66;color:#fff;border:1px solid rgba(255,255,255,.25);padding:6px 10px;border-radius:8px;cursor:pointer;user-select:none}
-    #loop-toggle.active{background:#004}
-    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;justify-items:center}
-    .deck-button{background:rgb(0,51,153);color:#fff;width:100px;height:64px;font-size:24px;border:1px solid rgba(255,255,255,.3);border-radius:10px;cursor:pointer;position:relative}
-    .deck-button>audio.clip{position:absolute;inset:0;width:0;height:0;opacity:0;pointer-events:none}
+    body {
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      background: #000;
+    }
+
+    #stream-deck {
+      background: rgb(0, 51, 153);
+      margin: 40px auto;
+      padding: 16px;
+      border-radius: 12px;
+      text-align: center;
+    }
+
+    #display {
+      color: rgb(254, 177, 0);
+      font-weight: 700;
+      margin-bottom: 12px;
+      min-height: 1.5em;
+    }
+
+    #loop-toggle {
+      display: inline-block;
+      margin-bottom: 12px;
+      background: #001a66;
+      color: #fff;
+      border: 1px solid rgba(255,255,255,.25);
+      padding: 6px 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    #loop-toggle.active {
+      background: #004;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      justify-items: center;
+    }
+
+    .deck-button {
+      background: rgb(0, 51, 153);
+      color: #fff;
+      width: 100px;
+      height: 64px;
+      font-size: 24px;
+      border: 1px solid rgba(255,255,255,.3);
+      border-radius: 10px;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .deck-button > audio.clip {
+      position: absolute;
+      inset: 0;
+      width: 0;
+      height: 0;
+      opacity: 0;
+      pointer-events: none;
+    }
   </style>
   <script src="teste.js"></script>
 </head>
@@ -33,34 +90,46 @@
   </main>
 
   <script>
-    const display=document.getElementById('display')
-    const loopToggle=document.getElementById('loop-toggle')
+    const display = document.getElementById('display')
+    const loopToggle = document.getElementById('loop-toggle')
 
-    function setLoopState(active){
-      document.querySelectorAll('audio.clip').forEach(a=>a.loop=active)
+    function setLoopState(active) {
+      document.querySelectorAll('audio.clip').forEach(a => a.loop = active)
     }
 
-    function playById(id){
-      const audio=document.getElementById(id)
-      if(!audio)return
-      document.querySelectorAll('audio.clip').forEach(el=>{if(el!==audio){el.pause();el.currentTime=0}})
-      audio.currentTime=0
+    function playById(id) {
+      const audio = document.getElementById(id)
+      if (!audio) return
+
+      document.querySelectorAll('audio.clip').forEach(el => {
+        if (el !== audio) {
+          el.pause()
+          el.currentTime = 0
+        }
+      })
+
+      audio.currentTime = 0
       audio.play()
-      display.textContent=audio.getAttribute('data-name')
+      display.textContent = audio.getAttribute('data-name')
     }
 
-    document.querySelectorAll('.deck-button').forEach(btn=>{
-      btn.addEventListener('click',()=>{const a=btn.querySelector('audio.clip');if(a)playById(a.id)})
+    document.querySelectorAll('.deck-button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const a = btn.querySelector('audio.clip')
+        if (a) playById(a.id)
+      })
     })
 
-    document.addEventListener('keydown',e=>{
-      if(e.key>='1'&&e.key<='9')playById(e.key)
+    document.addEventListener('keydown', e => {
+      if (e.key >= '1' && e.key <= '9') {
+        playById(e.key)
+      }
     })
 
-    loopToggle.addEventListener('click',()=>{
+    loopToggle.addEventListener('click', () => {
       loopToggle.classList.toggle('active')
-      const active=loopToggle.classList.contains('active')
-      loopToggle.textContent=active?'Loop: ON':'Loop: OFF'
+      const active = loopToggle.classList.contains('active')
+      loopToggle.textContent = active ? 'Loop: ON' : 'Loop: OFF'
       setLoopState(active)
     })
   </script>
